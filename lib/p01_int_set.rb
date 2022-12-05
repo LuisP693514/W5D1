@@ -86,7 +86,7 @@ class ResizingIntSet
     resize! if num_buckets == count
     unless self.include?(num)
       @count += 1
-      @store[num % num_buckets] = num unless self.include?(num)
+      @store[num % num_buckets] = num
     end
 
   end
