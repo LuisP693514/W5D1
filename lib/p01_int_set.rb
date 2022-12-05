@@ -25,7 +25,7 @@ class MaxIntSet
 
   def include?(num)
 
-    @store[num] == true
+    @store[num]
 
   end
 
@@ -86,7 +86,7 @@ class ResizingIntSet
     resize! if num_buckets == count
     unless self.include?(num)
       @count += 1
-      @store[num % num_buckets] = num
+      @store[num % num_buckets] << num
     end
 
   end
@@ -98,7 +98,7 @@ class ResizingIntSet
   def remove(num)
 
     if self.include?(num)
-      @store.delete(num)
+      @store[num % num_buckets].delete(num)
       @count -=1
     end
 
@@ -106,8 +106,7 @@ class ResizingIntSet
 
   def include?(num)
 
-    
-    @store[num % @store.length] == num
+    @store[num % @store.length].include?(num)
 
   end
 
@@ -122,13 +121,18 @@ class ResizingIntSet
   end
 
   def resize!
-    if self.count == num_buckets
-      new_arr = Array.new(num_buckets*2) {Array.new}
-
-      @store.each {|el| new_arr[el%new_arr.length] = el if el.instance_of?(Fixnum) }
     
-      @store = new_arr
+    new_arr = Array.new(num_buckets*2) {Array.new}
+
+    @store.each {|el| 
+        
+          
+      el.each {|num| 
+      new_arr[num % new_arr.length] << num if !num.nil? }
+        
+    }
+        
+    @store = new_arr
       
-    end
   end
 end
